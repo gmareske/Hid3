@@ -2,8 +2,11 @@
 module Id3.Parser
   where
 
+import Id3.Types
+
 import Control.Monad
 import Data.Binary.Get
+import Data.Bits
 import qualified Data.ByteString.Lazy as B
 import Data.Word
 
@@ -14,11 +17,13 @@ detectId3 = do
   identifier <- replicateM 3 getWord8
   return (identifier == id3HeaderCode)
 
-deserializeHeader :: Get (Word8, Word8, Word8, Word32)
+deserializeHeader :: Get (B.ByteString, B.ByteString, Bool, Bool, Word32)
 deserializeHeader = do
   identifier <- replicateM 3 getWord8
-  majorVersion <- getWord8
-  minorVersion <- getWord8
+  majorVersion <- B.singleton <$> getWord8
+  minorVersion <- B.singleton <$> getWord8
   flags <- getWord8
+  unsync <- return $ testBit flags 7
+  compr <- return $ testBit flags 6
   size <- getWord32be
-  return (majorVersion, minorVersion, flags, size) 
+  return (majorVersion, minorVersion, unsync, compr, size) 
