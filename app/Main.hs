@@ -1,6 +1,12 @@
 module Main where
 
-import Lib
+import Id3.Parser
+
+import qualified Data.ByteString.Lazy as B
+import Data.Binary.Get
+import Data.Word
 
 main :: IO ()
-main = someFunc
+main = do
+  input <- B.getContents
+  print $ runGet detectId3 input
