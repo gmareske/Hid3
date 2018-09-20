@@ -9,4 +9,4 @@ import Data.Word
 main :: IO ()
 main = do
   input <- B.getContents
-  print $ runGet detectId3 input
+  print $ runGet deserializeHeader input
