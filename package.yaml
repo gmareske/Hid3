@@ -24,6 +24,8 @@ dependencies:
 - containers
 - binary
 - bytestring
+- text
+#- utf8-string
 
 library:
   source-dirs: src
